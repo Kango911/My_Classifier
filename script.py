@@ -18,6 +18,7 @@ def text_cleaner(text):
     text = re.sub(r'\b\d+\b', ' digit ', text)  # Замена цифр
     return text
 
+
 # Загрузка данных из файла model.txt
 
 def load_data():
@@ -29,6 +30,7 @@ def load_data():
                 data['text'] += [row[0]]
                 data['tag'] += [row[1]]
     return data
+
 
 # Обучение
 
@@ -46,6 +48,7 @@ def train_test_split(data, validation_split=0.1):
         'test': {'x': X[-nb_validation_samples:], 'y': Y[-nb_validation_samples:]}
     }
 
+
 data = load_data()
 D = train_test_split(data)
 
@@ -58,9 +61,11 @@ text_clf.fit(D['train']['x'], D['train']['y'])
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
- bot.reply_to(message, "Hi! I'm K9 classifier bot.")
+    bot.reply_to(message, "Hi! I'm K9 classifier bot.")
+
 
 @bot.message_handler(func=lambda message: True)
 def reply_to_message(message):
@@ -69,5 +74,6 @@ def reply_to_message(message):
     zz.append(z)
     predicted = text_clf.predict(zz)
     bot.reply_to(message, predicted[0])
+
 
 bot.polling()
